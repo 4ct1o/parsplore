@@ -1,18 +1,24 @@
+import os
 import sys
 
+from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication, QMainWindow
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle("parsplore()")  # window title
-        self.resize(800, 600)               # window size
+from ui.email_setup_window import EmailSetupWindow
+from ui.main_window import MainWindow
 
 def main():
+    load_dotenv()
+
     app = QApplication(sys.argv)
 
-    window = MainWindow()
+    email = os.getenv("USER_EMAIL")
+
+    if email:
+        window = MainWindow()
+    else:
+        window = EmailSetupWindow()
+
     window.show()
 
     sys.exit(app.exec())
