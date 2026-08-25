@@ -6,16 +6,22 @@ from PySide6.QtWidgets import (
     QLabel,
     QWidget,
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import (
+    Qt,
+    Signal,
+)
 
-from config.settings import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT
+from config.settings import load_settings
+from services.email_service import process_email
 
 class EmailSetupWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle(f"{APP_NAME} - Email Setup")
-        self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        settings = load_settings()
+
+        self.setWindowTitle(f"{settings.get('app_name', 'parsplore()')} - Email Setup")
+        self.resize(settings.get('window_width', 800), settings.get('window_height', 600))
 
         self.email_label = QLabel("Email:")
         self.email_input = QLineEdit()
@@ -36,3 +42,13 @@ class EmailSetupWindow(QWidget):
 
         outer_layout = QVBoxLayout(self)
         outer_layout.addWidget(form_widget, alignment=Qt.AlignCenter)
+
+        self.continue_button.clicked.connect(self.handle_continue)
+
+    email_saved = Signal()
+
+    def handle_continue(self):
+        email = self.email_input.text()
+
+        if process_email(email):
+            self.email_saved.emit()

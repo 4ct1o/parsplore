@@ -1,10 +1,12 @@
 from PySide6.QtWidgets import QMainWindow
 
-from config.settings import APP_NAME, WINDOW_WIDTH, WINDOW_HEIGHT
+from config.settings import load_settings
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle(f"{APP_NAME}")
-        self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        settings = load_settings()
+
+        self.setWindowTitle(settings.get('app_name', 'parsplore()'))
+        self.resize(settings.get('window_width', 800), settings.get('window_height', 600))
