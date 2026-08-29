@@ -1,6 +1,11 @@
 """Ticker validation module."""
 
-def is_ticker_file_up_to_date(file: str) -> bool:
+import json
+import requests
+
+from src.clients.sec_client import get_sec_ticker_last_modified
+
+def is_ticker_file_up_to_date(file: str = "data/tickers.json") -> bool:
     """
     Check if the ticker file is up to date.
 
@@ -10,7 +15,13 @@ def is_ticker_file_up_to_date(file: str) -> bool:
         bool: True if the ticker file is up to date, False otherwise.
     """
 
-    if file == "tickers.json":
+    last_modified = get_sec_ticker_last_modified()
+
+    with open(file, "r") as f:
+        data = json.load(f)
+        current_last_modified = data.get("last_modified")
+
+    if last_modified == current_last_modified:
         return True
 
     return False
