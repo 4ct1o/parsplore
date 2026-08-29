@@ -1,4 +1,4 @@
-"""Window for setting up the user's email."""
+"""Email setup window."""
 
 from PySide6.QtWidgets import (
     QLineEdit,
@@ -18,6 +18,7 @@ from services.email_service import process_email
 
 
 class EmailSetupWindow(QWidget):
+    """Email setup window."""
     def __init__(self):
         super().__init__()
 
@@ -56,4 +57,3 @@ class EmailSetupWindow(QWidget):
 
         if process_email(email):
             self.email_saved.emit()
-            

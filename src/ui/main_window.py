@@ -15,6 +15,7 @@ from PySide6.QtCore import Qt
 from config.settings import load_settings
 
 class MainWindow(QMainWindow):
+    """Main application window."""
     def __init__(self):
         super().__init__()
 

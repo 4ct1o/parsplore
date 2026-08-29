@@ -1,4 +1,4 @@
-"""Email validation utility."""
+"""Email validation module."""
 
 import re
 

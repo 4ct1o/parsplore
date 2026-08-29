@@ -17,4 +17,3 @@ def save_email(email: str) -> bool:
     save_settings(settings)
 
     return True
-    

@@ -1,6 +1,8 @@
+"""Main application."""
+
 import sys
 
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication
 
 from ui.email_setup_window import EmailSetupWindow
 from ui.main_window import MainWindow
@@ -8,6 +10,7 @@ from config.settings import load_settings
 from validators.email_validator import is_valid_email
 
 class Application(QApplication):
+    """Main application class."""
     def __init__(self, argv):
         super().__init__(argv)
 
@@ -38,6 +41,7 @@ class Application(QApplication):
         self.window.show()
 
 def main():
+    """Start the application."""
 
     app = Application(sys.argv)
 
