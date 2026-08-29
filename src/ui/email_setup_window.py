@@ -48,6 +48,7 @@ class EmailSetupWindow(QWidget):
     email_saved = Signal()
 
     def handle_continue(self):
+        """Process the email input and emit a signal if saved successfully."""
         email = self.email_input.text()
 
         if process_email(email):
