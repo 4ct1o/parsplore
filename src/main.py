@@ -14,6 +14,7 @@ class Application(QApplication):
         self.window = None
 
     def start(self):
+        """Start the application by checking for a valid email"""
         settings = load_settings()
         email = settings.get("email")
 
@@ -23,11 +24,13 @@ class Application(QApplication):
             self.show_email_setup_window()
 
     def show_email_setup_window(self):
+        """Show the email setup window."""
         self.window = EmailSetupWindow()
         self.window.email_saved.connect(self.show_main_window)
         self.window.show()
 
     def show_main_window(self):
+        """Show the main application window."""
         if self.window:
             self.window.close()
 

@@ -1,3 +1,5 @@
+"""Application settings management module."""
+
 import json
 from pathlib import Path
 

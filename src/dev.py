@@ -1,3 +1,5 @@
+"""Development script to test windows and functionalities."""
+
 import sys
 
 from PySide6.QtWidgets import QApplication

@@ -1,5 +1,6 @@
+"""Email storage module"""
+
 from config.settings import load_settings, save_settings
-from validators.email_validator import is_valid_email
 
 def save_email(email: str) -> bool:
     """

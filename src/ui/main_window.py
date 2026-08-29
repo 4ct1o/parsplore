@@ -1,3 +1,5 @@
+"""Main application window."""
+
 from PySide6.QtWidgets import (
     QMainWindow,
     QLineEdit,
