@@ -35,7 +35,7 @@ def search_ticker(search_term: str, limit: int = 10) -> list[tuple[str, str, str
             score
             ) for score, cik, _ in results] 
 
-def create_ticker_submission_link(cik: str) -> str:
+def create_company_submission_link(cik: str) -> str:
     """
     Create a link to the SEC submissions page for a given ticker.
 
