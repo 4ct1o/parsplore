@@ -1,10 +1,10 @@
-"""Ticker validation module."""
+"""SEC validation module."""
 
 import json
 import requests
 
 from src.clients.sec_client import get_sec_ticker_last_modified
-from src.data.ticker_storage import read_tickers_last_modified
+from src.data.sec_storage import read_tickers_last_modified
 
 def is_ticker_file_up_to_date(file: str = "data/tickers.json") -> bool:
     """

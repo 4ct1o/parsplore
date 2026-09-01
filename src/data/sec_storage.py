@@ -1,4 +1,4 @@
-"""Ticker storage module."""
+"""SEC storage module."""
 
 import json
 
