@@ -4,7 +4,7 @@ import json
 
 from clients.sec_client import get_sec_tickers, get_sec_ticker_last_modified
 
-def save_tickers(file: str = "data/tickers.json") -> None:
+def save_tickers(file: str = "data/sec_tickers_database.json") -> None:
     """
     Save the tickers.
 
@@ -22,7 +22,7 @@ def save_tickers(file: str = "data/tickers.json") -> None:
     with open(file, "w") as f:
         json.dump(data, f, indent=2)
 
-def read_tickers_last_modified(file: str = "data/tickers.json") -> str | None:
+def read_tickers_last_modified(file: str = "data/sec_tickers_database.json") -> str | None:
     """
     Get the last modified date of the tickers.
 
@@ -31,13 +31,15 @@ def read_tickers_last_modified(file: str = "data/tickers.json") -> str | None:
     Returns:
         str | None: The last modified date of the tickers.
     """
-
-    with open(file, "r") as f:
-        data = json.load(f)
+    try:
+        with open(file, "r") as f:
+                data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
 
     return data.get("last_modified")        
 
-def read_tickers(file: str = "data/tickers.json") -> dict:
+def read_tickers(file: str = "data/sec_tickers_database.json") -> dict:
     """
     Read the tickers.
 

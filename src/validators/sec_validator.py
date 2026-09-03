@@ -6,7 +6,7 @@ import requests
 from clients.sec_client import get_sec_ticker_last_modified
 from data.sec_storage import read_tickers_last_modified
 
-def is_ticker_file_up_to_date(file: str = "data/tickers.json") -> bool:
+def is_ticker_file_up_to_date(file: str = "data/sec_tickers_database.json") -> bool:
     """
     Check if the ticker file is up to date.
 
@@ -20,7 +20,4 @@ def is_ticker_file_up_to_date(file: str = "data/tickers.json") -> bool:
 
     current_last_modified = read_tickers_last_modified()
 
-    if last_modified == current_last_modified:
-        return True
-
-    return False
+    return last_modified == current_last_modified
