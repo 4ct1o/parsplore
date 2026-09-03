@@ -219,3 +219,6 @@ __marimo__/
 
 # Visual Studio Code
 .vscode/
+
+# Big data files
+data/.
