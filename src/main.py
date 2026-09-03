@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QApplication
 
 from ui.email_setup_window import EmailSetupWindow
 from ui.main_window import MainWindow
+from ui.search_window import CompanySearchWindow
 from config.settings import load_settings
 from validators.email_validator import is_valid_email
 
@@ -37,7 +38,17 @@ class Application(QApplication):
         if self.window:
             self.window.close()
 
+        self.window.search_term.connect(self.show_company_search_window)
+
         self.window = MainWindow()
+        self.window.show()
+
+    def show_company_search_window(self, search_term: str):
+        """Show the company search window."""
+        if self.window:
+            self.window.close()
+
+        self.window = CompanySearchWindow(search_term)
         self.window.show()
 
 def main():
