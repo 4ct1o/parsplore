@@ -2,8 +2,7 @@
 
 import requests
 
-from src.config.settings import load_settings
-from src.services.sec_service import create_company_submission_link
+from config.settings import load_settings
 
 def get_headers() -> dict:
     """
@@ -56,6 +55,22 @@ def get_sec_ticker_last_modified() -> str | None:
     last_modified = response.headers.get("Last-Modified")
 
     return last_modified
+
+def create_company_submission_link(cik: str) -> str:
+    """
+    Create a link to the SEC submissions page for a given ticker.
+
+    Args:
+        cik (str): The CIK number.
+    Returns:
+        str: The URL to the SEC submissions page for the given ticker.
+    """
+
+    formatted_cik = f"CIK{cik.zfill(10)}"
+
+    url = f"https://data.sec.gov/submissions/{formatted_cik}.json"
+
+    return url
 
 def get_latest_submissions(cik: str, limit: int = 10) -> dict:
     """
