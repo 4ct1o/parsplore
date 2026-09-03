@@ -221,4 +221,4 @@ __marimo__/
 .vscode/
 
 # Big data files
-data/.
+data/sec_tickers_database.json
