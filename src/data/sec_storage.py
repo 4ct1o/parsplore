@@ -2,7 +2,7 @@
 
 import json
 
-from src.clients.sec_client import get_sec_tickers, get_sec_ticker_last_modified
+from clients.sec_client import get_sec_tickers, get_sec_ticker_last_modified
 
 def save_tickers(file: str = "data/tickers.json") -> None:
     """
