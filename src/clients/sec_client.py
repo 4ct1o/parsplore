@@ -56,7 +56,7 @@ def get_sec_ticker_last_modified() -> str | None:
 
     return last_modified
 
-def create_company_submission_link(cik: str) -> str:
+def create_company_submission_link(cik: str | int) -> str:
     """
     Create a link to the SEC submissions page for a given ticker.
 
@@ -65,7 +65,12 @@ def create_company_submission_link(cik: str) -> str:
     Returns:
         str: The URL to the SEC submissions page for the given ticker.
     """
+    
+    cik = str(cik).strip()
 
+    if not cik or not cik.isdigit():
+        raise ValueError(f"Invalid CIK received: {cik!r}")
+    
     formatted_cik = f"CIK{cik.zfill(10)}"
 
     url = f"https://data.sec.gov/submissions/{formatted_cik}.json"
@@ -93,7 +98,7 @@ def get_latest_submissions(cik: str, limit: int = 10) -> dict:
 
     recent_filings = []
 
-    for key in range(min(limit, len(data['recent']))):
+    for key in range(min(limit, len(data['filings']['recent']))):
         filing = {
             'accessionNumber':       data['filings']['recent']['accessionNumber'][key],
             'filingDate':            data['filings']['recent']['filingDate'][key],

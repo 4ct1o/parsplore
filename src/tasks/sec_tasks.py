@@ -1,6 +1,6 @@
 """SEC tasks."""
 
-from PySide6.QtCore import QObject, QThread, Signal, Slot
+from PySide6.QtCore import QObject, Signal, Slot
 
 class SECTickerTask(QObject):
     """Task to validate and update the ticker database with SEC data."""
@@ -38,4 +38,20 @@ class SECSearchTask(QObject):
         """Run the task."""
         from services.sec_service import search_company
         results = search_company(self.search_term, limit=10)
+        print(results) #                                                       DELETE ME
+        self.finished.emit(results)
+
+class SECSubmissionsTask(QObject):
+    """Task to get the latest submissions for a given CIK."""
+    finished = Signal(list) #                                                     dict?
+
+    def __init__(self, cik: str):
+        super().__init__()
+        self.cik = cik
+
+    @Slot()
+    def run(self):
+        """Run the task."""
+        from clients.sec_client import get_latest_submissions
+        results = get_latest_submissions(self.cik, limit=10)
         self.finished.emit(results)
