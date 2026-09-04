@@ -21,8 +21,10 @@ from tasks.sec_tasks import SECTickerTask
 
 class MainWindow(QMainWindow):
     """Main application window."""
-    def __init__(self):
+    def __init__(self, ticker_service):
         super().__init__()
+
+        self.ticker_service = ticker_service
 
         settings = load_settings()
 
@@ -55,8 +57,6 @@ class MainWindow(QMainWindow):
 
         self.search_button.clicked.connect(self.handle_search)
 
-        self.start_sec_ticker_task()
-
     search_term = Signal(str)
 
     def handle_search(self):
@@ -64,19 +64,4 @@ class MainWindow(QMainWindow):
         term = self.search_input.text()
         if term:
             self.search_term.emit(term)
-
-    def start_sec_ticker_task(self):
-        """Start the SEC ticker task."""
-
-        self.sec_ticker_task = SECTickerTask()
-        self.sec_ticker_thread = QThread()
-
-        self.sec_ticker_task.moveToThread(self.sec_ticker_thread)
-
-        self.sec_ticker_thread.started.connect(self.sec_ticker_task.run)
-        self.sec_ticker_task.finished.connect(self.sec_ticker_thread.quit)
-        self.sec_ticker_task.finished.connect(self.sec_ticker_task.deleteLater)
-        self.sec_ticker_thread.finished.connect(self.sec_ticker_thread.deleteLater)
-
-        self.sec_ticker_thread.start()
 
