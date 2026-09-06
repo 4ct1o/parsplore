@@ -2,7 +2,7 @@
 
 import json
 
-from clients.sec_client import get_sec_tickers, get_sec_ticker_last_modified
+from clients.sec_client import get_tickers
 
 def save_tickers(file: str = "data/sec_tickers_database.json") -> None:
     """
@@ -12,7 +12,7 @@ def save_tickers(file: str = "data/sec_tickers_database.json") -> None:
         file (str): The path to the file to save the tickers to.
     """
 
-    sec_tickers, last_modified = get_sec_tickers()
+    sec_tickers, last_modified = get_tickers()
 
     data = {
         "last_modified": last_modified,
@@ -21,6 +21,21 @@ def save_tickers(file: str = "data/sec_tickers_database.json") -> None:
 
     with open(file, "w") as f:
         json.dump(data, f, indent=2)
+
+def read_tickers(file: str = "data/sec_tickers_database.json") -> dict:
+    """
+    Read the tickers.
+
+    Args:
+        file (str): The path to the file to read the tickers from.
+    Returns:
+        dict: The tickers.
+    """
+
+    with open(file, "r") as f:
+        data = json.load(f)
+
+    return data.get("tickers", {})
 
 def read_tickers_last_modified(file: str = "data/sec_tickers_database.json") -> str | None:
     """
@@ -38,18 +53,3 @@ def read_tickers_last_modified(file: str = "data/sec_tickers_database.json") -> 
         return None
 
     return data.get("last_modified")        
-
-def read_tickers(file: str = "data/sec_tickers_database.json") -> dict:
-    """
-    Read the tickers.
-
-    Args:
-        file (str): The path to the file to read the tickers from.
-    Returns:
-        dict: The tickers.
-    """
-
-    with open(file, "r") as f:
-        data = json.load(f)
-
-    return data.get("tickers", {})

@@ -1,7 +1,7 @@
 """Email service module."""
 
 from validators.email_validator import is_valid_email
-from data.email_storage import save_email
+from storage.email_storage import save_email
 
 def process_email(email:str) -> bool:
     """

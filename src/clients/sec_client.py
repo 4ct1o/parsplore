@@ -18,10 +18,10 @@ def get_headers() -> dict:
               }
     return headers
 
-def get_sec_tickers() -> tuple[dict, str]:
+def get_tickers() -> tuple[dict, str]:
     """
     Get the tickers from the SEC.
-
+    
     Returns:
         dict: The tickers from the SEC.
     """
@@ -38,25 +38,7 @@ def get_sec_tickers() -> tuple[dict, str]:
 
     return sec_tickers, last_modified
 
-def get_sec_ticker_last_modified() -> str | None:
-    """
-    Get the last modified date of the tickers from the SEC.
-
-    Returns:
-        str | None: The last modified date of the tickers.
-    """
-
-    sec_tickers_url = 'https://www.sec.gov/files/company_tickers.json'
-    headers = get_headers()
-
-    response = requests.head(sec_tickers_url, headers=headers)
-    response.raise_for_status()
-
-    last_modified = response.headers.get("Last-Modified")
-
-    return last_modified
-
-def create_company_submission_link(cik: str | int) -> str:
+def create_submissions_link(cik: str | int) -> str:
     """
     Create a link to the SEC submissions page for a given ticker.
 
@@ -77,7 +59,8 @@ def create_company_submission_link(cik: str | int) -> str:
 
     return url
 
-def get_latest_submissions(cik: str, limit: int = 10) -> dict:
+
+def get_submissions(cik: str, limit: int = 20) -> dict:
     """
     Get the latest submissions for a given link.
 
@@ -87,7 +70,7 @@ def get_latest_submissions(cik: str, limit: int = 10) -> dict:
         dict: The latest submissions for the given link.
     """
 
-    url = create_company_submission_link(cik)
+    url = create_submissions_link(cik)
 
     headers = get_headers()
 
@@ -115,3 +98,21 @@ def get_latest_submissions(cik: str, limit: int = 10) -> dict:
         recent_filings.append(filing)
 
     return recent_filings
+
+def get_tickers_last_modified() -> str | None:
+    """
+    Get the last modified date of the tickers from the SEC.
+
+    Returns:
+        str | None: The last modified date of the tickers.
+    """
+
+    sec_tickers_url = 'https://www.sec.gov/files/company_tickers.json'
+    headers = get_headers()
+
+    response = requests.head(sec_tickers_url, headers=headers)
+    response.raise_for_status()
+
+    last_modified = response.headers.get("Last-Modified")
+
+    return last_modified

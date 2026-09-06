@@ -12,25 +12,29 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtCore import (
     Qt,
-    QThread,
     Signal,
 )
 
 from config.settings import load_settings
-from tasks.sec_tasks import SECTickerTask
 
 class MainWindow(QMainWindow):
     """Main application window."""
-    def __init__(self, ticker_service):
+
+    search_term = Signal(str)
+
+    def __init__(self, dispatcher):
         super().__init__()
 
-        self.ticker_service = ticker_service
+        # ticker update dispatcher
+        self.ticker_update = dispatcher
 
+        # load settings
         settings = load_settings()
 
         self.setWindowTitle(settings.get('app_name', 'parsplore()'))
         self.resize(settings.get('window_width', 800), settings.get('window_height', 600))
 
+        # search form
         self.search_label = QLabel("Company:")
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("AAPL, Apple, Apple Inc. ...")
@@ -55,9 +59,8 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
+        # connect search button
         self.search_button.clicked.connect(self.handle_search)
-
-    search_term = Signal(str)
 
     def handle_search(self):
         """Emit the search term signal."""

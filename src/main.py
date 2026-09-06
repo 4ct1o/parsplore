@@ -6,10 +6,11 @@ from PySide6.QtWidgets import QApplication
 
 from ui.email_setup_window import EmailSetupWindow
 from ui.main_window import MainWindow
-from ui.search_window import CompanySearchWindow, SubmissionSearchWindow
+from ui.company_search_window import CompanySearchWindow
+from ui.submission_search_window import SubmissionSearchWindow
 from config.settings import load_settings
 from validators.email_validator import is_valid_email
-from services.sec_service import CompanySearchService, SubmissionSearchService, TickerUpdateService 
+from dispatchers.sec_dispatchers import TickerUpdateDispatcher, CompanySearchDispatcher, SubmissionSearchDispatcher
 
 class Application(QApplication):
     """Main application class."""
@@ -18,9 +19,10 @@ class Application(QApplication):
 
         self.window = None
 
-        self.ticker_service = TickerUpdateService()
-        self.company_search_service = CompanySearchService()
-        self.submission_search_service = SubmissionSearchService()
+        # dispatchers
+        self.ticker_update_dispatcher = TickerUpdateDispatcher()
+        self.company_search_dispatcher = CompanySearchDispatcher()
+        self.submission_search_dispatcher = SubmissionSearchDispatcher()
 
     def start(self):
         """Start the application"""
@@ -43,7 +45,7 @@ class Application(QApplication):
         if self.window:
             self.window.close()
 
-        self.window = MainWindow(self.ticker_service)
+        self.window = MainWindow(self.ticker_update_dispatcher)
         self.window.search_term.connect(self.show_company_search_window)
         self.window.show()
 
@@ -53,25 +55,26 @@ class Application(QApplication):
             self.window.close()
 
         self.window = CompanySearchWindow(
-            self.company_search_service,
+            self.company_search_dispatcher,
             search_term
         )
 
         self.window.cik_selected.connect(self.show_submission_search_window)
 
-        self.company_search_service.start_company_search_task(search_term)
+        self.company_search_dispatcher.start(search_term)
 
         self.window.show()
 
     def show_submission_search_window(self, cik: str):
         """Show the submission search window."""
+
         if self.window:
             self.window.close()
 
-        self.submission_search_service.start_submission_search_task(cik)
+        self.submission_search_dispatcher.start(cik)
 
         self.window = SubmissionSearchWindow(
-            self.submission_search_service,
+            self.submission_search_dispatcher,
             cik
         )
         self.window.show()

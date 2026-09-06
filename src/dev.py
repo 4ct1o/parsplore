@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QApplication
 
 from ui.email_setup_window import EmailSetupWindow
 from ui.main_window import MainWindow
-from ui.search_window import CompanySearchWindow
+from ui.company_search_window import CompanySearchWindow
 
 
 app = QApplication(sys.argv)
