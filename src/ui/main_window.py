@@ -43,6 +43,10 @@ class MainWindow(QMainWindow):
             self.settings.get("window_height", 600),
         )
 
+        # history
+        self.navigation_history = []
+        self.history_index = -1
+
         # dispatchers
         self.company_search_dispatcher = company_search_dispatcher
         self.submission_search_dispatcher = submission_search_dispatcher
@@ -53,6 +57,9 @@ class MainWindow(QMainWindow):
 
         self.navigation_bar = NavigationBar()
         toolbar.addWidget(self.navigation_bar)
+
+        self.navigation_bar.back_requested.connect(self.go_back)
+        self.navigation_bar.forward_requested.connect(self.go_forward)
 
         # pages
         self.pages = QStackedWidget()
@@ -83,15 +90,42 @@ class MainWindow(QMainWindow):
         else:
             self.show_email_setup()
 
+    def navigate_to(self, page: QWidget):
+        """Navigate to a specific page."""
+
+        if self.pages.indexOf(page) == -1:
+            self.pages.addWidget(page)
+
+        self.pages.setCurrentWidget(page)
+        # remove forward history
+        del self.navigation_history[self.history_index + 1 :]
+        # add to history
+        self.navigation_history.append(page)
+        self.history_index += 1
+
+    def go_back(self):
+        """Go back to the previous page."""
+        if self.history_index > 0:
+            self.history_index -= 1
+            previous_page = self.navigation_history[self.history_index]
+            self.pages.setCurrentWidget(previous_page)
+
+    def go_forward(self):
+        """Go forward to the next page."""
+        if self.history_index < len(self.navigation_history) - 1:
+            self.history_index += 1
+            next_page = self.navigation_history[self.history_index]
+            self.pages.setCurrentWidget(next_page)
+
     def show_email_setup(self):
         """Show the email setup page."""
 
-        self.pages.setCurrentWidget(self.email_setup_page)
+        self.navigate_to(self.email_setup_page)
 
     def show_company_search(self):
         """Show the company search page."""
 
-        self.pages.setCurrentWidget(self.company_search_page)
+        self.navigate_to(self.company_search_page)
 
     def show_company_results(self, search_term: str):
         """Show company search results."""
@@ -105,8 +139,7 @@ class MainWindow(QMainWindow):
             self.show_company_submissions
         )
 
-        self.pages.addWidget(page)
-        self.pages.setCurrentWidget(page)
+        self.navigate_to(page)
 
         self.company_search_dispatcher.start(search_term)
 
@@ -118,7 +151,6 @@ class MainWindow(QMainWindow):
             cik,
         )
 
-        self.pages.addWidget(page)
-        self.pages.setCurrentWidget(page)
+        self.navigate_to(page)
 
         self.submission_search_dispatcher.start(cik)

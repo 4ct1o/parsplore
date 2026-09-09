@@ -28,5 +28,3 @@ class NavigationBar(QWidget):
 
         self.back_button.clicked.connect(self.back_requested)
         self.forward_button.clicked.connect(self.forward_requested)
-
-    
