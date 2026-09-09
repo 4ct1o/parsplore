@@ -1,17 +1,17 @@
 """Development script to test windows and functionalities."""
 
-import sys
+#import sys
 
-from PySide6.QtWidgets import QApplication
+#from PySide6.QtWidgets import QApplication
 
-from ui.email_setup_window import EmailSetupWindow
-from ui.main_window import MainWindow
-from ui.company_search_window import CompanySearchWindow
+#from ui.pages.email_setup_page import EmailSetupWindow
+#from ui.main_window import MainWindow
+#from ui.pages.company_search_page import CompanySearchWindow
 
 
-app = QApplication(sys.argv)
+#app = QApplication(sys.argv)
 
-window = MainWindow()
-window.show()
+#window = MainWindow()
+#window.show()
 
-sys.exit(app.exec())
+#sys.exit(app.exec())

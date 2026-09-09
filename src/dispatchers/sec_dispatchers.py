@@ -47,7 +47,7 @@ class CompanySearchDispatcher(QObject):
 
     def handle_results(self, results: list[tuple[str, str, str, float]]):
         """Handle the search results."""
-        self.company_search_completed.emit(results)
+        self.search_results.emit(results)
 
 class SubmissionSearchDispatcher(QObject):
     """Submission search dispatcher."""
@@ -73,4 +73,4 @@ class SubmissionSearchDispatcher(QObject):
 
     def handle_results(self, results: list[dict]):
         """Handle the submission results."""
-        self.submissions_fetched.emit(results)
+        self.search_results.emit(results)
