@@ -15,16 +15,18 @@ from PySide6.QtWidgets import (
 class CompanySubmissionsPage(QWidget):
     """Company submissions page."""
 
-    accession_number = Signal(str)
+    form_info = Signal(dict)
 
-    def __init__(self, dispatcher, cik: str):
+    def __init__(self, dispatcher, company_info: dict):
         super().__init__()
 
         # Submission search dispatcher
         self.submission_search_dispatcher = dispatcher
-
-        # Store CIK
-        self.cik = cik
+        
+        # Store company info
+        self.company_info = company_info
+        self.cik = company_info.get("cik", "")
+        self.ticker = company_info.get("ticker", "")
 
         # Main layout
         main_layout = QVBoxLayout(self)
@@ -76,6 +78,7 @@ class CompanySubmissionsPage(QWidget):
         for submission in results:
             form = submission["form"]
             date = submission["filingDate"]
+            report_date = submission["reportDate"]
             accession_number = submission["accessionNumber"]
 
             submission_row = QHBoxLayout()
@@ -96,8 +99,10 @@ class CompanySubmissionsPage(QWidget):
 
             button.clicked.connect(
                 lambda checked=False,
-                accession_number=accession_number:
-                self.accession_number.emit(accession_number)
+                accession_number=accession_number,
+                form=form,
+                report_date=report_date:
+                self.form_info.emit(dict(ticker=self.ticker, cik=self.cik, form=form, accession_number=accession_number, report_date=report_date))
             )
 
             submission_row.addWidget(form_label)

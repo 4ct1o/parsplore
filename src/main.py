@@ -8,6 +8,7 @@ from dispatchers.sec_dispatchers import (
     TickerUpdateDispatcher,
     CompanySearchDispatcher,
     SubmissionSearchDispatcher,
+    FormSearchDispatcher
 )
 
 from ui.main_window import MainWindow
@@ -23,12 +24,14 @@ class Application(QApplication):
         self.ticker_update_dispatcher = TickerUpdateDispatcher()
         self.company_search_dispatcher = CompanySearchDispatcher()
         self.submission_search_dispatcher = SubmissionSearchDispatcher()
+        self.form_search_dispatcher = FormSearchDispatcher()
 
         # Main window
         self.window = MainWindow(
             self.ticker_update_dispatcher,
             self.company_search_dispatcher,
             self.submission_search_dispatcher,
+            self.form_search_dispatcher
         )
 
     def start(self):

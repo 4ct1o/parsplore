@@ -38,7 +38,7 @@ def get_tickers() -> tuple[dict, str]:
 
     return sec_tickers, last_modified
 
-def create_submissions_link(cik: str | int) -> str:
+def create_submissions_link(company_info: dict) -> str:
     """
     Create a link to the SEC submissions page for a given ticker.
 
@@ -47,8 +47,8 @@ def create_submissions_link(cik: str | int) -> str:
     Returns:
         str: The URL to the SEC submissions page for the given ticker.
     """
-    
-    cik = str(cik).strip()
+
+    cik = str(company_info.get("cik", "")).strip()
 
     if not cik or not cik.isdigit():
         raise ValueError(f"Invalid CIK received: {cik!r}")
@@ -116,3 +116,45 @@ def get_tickers_last_modified() -> str | None:
     last_modified = response.headers.get("Last-Modified")
 
     return last_modified
+
+def create_form_link(form_info: dict) -> str:
+    """
+    Create a link to the SEC form page for a given CIK and accession number.
+
+    Args:
+        form_info (dict): A dictionary containing the form information.
+
+    Returns:
+        str: The URL to the SEC form page for the given CIK and accession number.
+    """
+    cik = str(form_info.get("cik", "")).strip()
+    accession_number = str(form_info.get("accession_number", "")).replace('-', '').strip()
+    ticker = str(form_info.get("ticker", "")).strip().lower()
+    report_date = str(form_info.get("report_date", "")).replace('-', '').strip()
+
+    if not cik or not cik.isdigit():
+        raise ValueError(f"Invalid CIK received: {cik!r}")
+
+    if not accession_number:
+        raise ValueError(f"Invalid accession number received: {accession_number!r}")
+
+    return f"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{ticker}-{report_date}.htm"
+
+def get_form(form_info: dict) -> str:
+    """
+    Get the form from the SEC.
+
+    Args:
+        form_info (dict): A dictionary containing the form information.
+
+    Returns:
+        str: The form from the SEC.
+    """
+    sec_form_url = create_form_link(form_info)
+
+    headers = get_headers()
+
+    response = requests.get(sec_form_url, headers=headers)
+    response.raise_for_status()
+
+    return response.text

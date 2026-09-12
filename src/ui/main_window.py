@@ -15,6 +15,7 @@ from ui.widgets.navigation_bar import NavigationBar
 from ui.pages.company_search_page import CompanySearchPage
 from ui.pages.company_results_page import CompanyResultsPage
 from ui.pages.company_submissions_page import CompanySubmissionsPage
+from ui.pages.form_view_page import FormViewPage
 from ui.pages.email_setup_page import EmailSetupPage
 from validators.email_validator import is_valid_email
 
@@ -27,6 +28,7 @@ class MainWindow(QMainWindow):
         ticker_update_dispatcher,
         company_search_dispatcher,
         submission_search_dispatcher,
+        form_search_dispatcher,
     ):
         super().__init__()
 
@@ -50,7 +52,7 @@ class MainWindow(QMainWindow):
         # dispatchers
         self.company_search_dispatcher = company_search_dispatcher
         self.submission_search_dispatcher = submission_search_dispatcher
-
+        self.form_search_dispatcher = form_search_dispatcher
         # toolbar
         toolbar = QToolBar()
         self.addToolBar(toolbar)
@@ -135,7 +137,7 @@ class MainWindow(QMainWindow):
             search_term,
         )
 
-        page.cik_selected.connect(
+        page.company_info.connect(
             self.show_company_submissions
         )
 
@@ -151,6 +153,22 @@ class MainWindow(QMainWindow):
             cik,
         )
 
+        page.form_info.connect(
+            self.show_form_view
+        )
+
         self.navigate_to(page)
 
         self.submission_search_dispatcher.start(cik)
+
+    def show_form_view(self, form_info: dict):
+        """Show form view."""
+
+        page = FormViewPage(
+            self.form_search_dispatcher,
+            form_info
+        )
+
+        self.navigate_to(page)
+
+        self.form_search_dispatcher.start(form_info)

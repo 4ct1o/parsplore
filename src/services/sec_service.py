@@ -2,8 +2,10 @@
 
 from rapidfuzz import fuzz
 import re
+from bs4 import BeautifulSoup
 
 from storage.sec_storage import read_tickers
+from clients.sec_client import get_form
 
 def search_company(search_term: str, limit: int = 10) -> list[tuple[str, str, str, float]]:
     """
@@ -56,3 +58,42 @@ def search_company(search_term: str, limit: int = 10) -> list[tuple[str, str, st
     results.sort(key=lambda result: result[3], reverse=True)
 
     return results[:limit] 
+
+# Ignore warnings about XML being parsed as HTML
+from bs4 import XMLParsedAsHTMLWarning
+import warnings
+
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
+
+def create_submission_html(form_info: dict) -> str:
+    """
+    Create the HTML for a submission.
+
+    Args:
+        form_info (dict): The form information.
+    Returns:
+        str: The HTML for the submission.
+    """
+
+    html_text = get_form(form_info)
+
+    soup = BeautifulSoup(html_text, "lxml")
+
+    # Remove XBRL metadata
+    for tag in soup.find_all(
+        lambda tag: tag.name and (
+            tag.name.lower() in {
+                "ix:header",
+                "ix:hidden",
+                "ix:resources",
+            }
+            or tag.name.lower().startswith("ix:")
+        )
+    ):
+        tag.decompose()
+
+    # Remove script and noscript tags
+    for tag in soup.find_all(["script", "noscript"]):
+        tag.decompose()
+
+    return str(soup)

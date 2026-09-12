@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 class CompanyResultsPage(QWidget):
     """Company search results page."""
 
-    cik_selected = Signal(str)
+    company_info = Signal(dict)
 
     def __init__(self, dispatcher, search_term: str):
         super().__init__()
@@ -65,8 +65,9 @@ class CompanyResultsPage(QWidget):
 
             button.clicked.connect(
                 lambda checked=False,
-                company_cik=cik:
-                self.cik_selected.emit(company_cik)
+                company_cik=cik,
+                company_ticker=ticker:
+                self.company_info.emit(dict(cik=company_cik, ticker=company_ticker))
             )
 
             search_row.addWidget(company_info_label)

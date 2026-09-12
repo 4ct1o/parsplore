@@ -54,3 +54,18 @@ class SubmissionSearchWorker(QObject):
         from clients.sec_client import get_submissions
         results = get_submissions(self.cik, limit=10)
         self.finished.emit(results)
+
+class FormSearchWorker(QObject):
+    """Task to get the form data for a given CIK and accession number."""
+    finished = Signal(str)
+
+    def __init__(self, form_info: dict):
+        super().__init__()
+        self.form_info = form_info
+
+    @Slot()
+    def run(self):
+        """Run the task."""
+        from services.sec_service import create_submission_html
+        results = create_submission_html(self.form_info)
+        self.finished.emit(results)

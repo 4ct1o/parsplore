@@ -74,3 +74,29 @@ class SubmissionSearchDispatcher(QObject):
     def handle_results(self, results: list[dict]):
         """Handle the submission results."""
         self.search_results.emit(results)
+
+class FormSearchDispatcher(QObject):
+    """Form search dispatcher."""
+
+    form_results = Signal(str)
+
+    def start(self, form_info: dict):
+        """Start the form search task."""
+        from workers.sec_workers import FormSearchWorker
+
+        self.form_task = FormSearchWorker(form_info)
+        self.form_thread = QThread()
+
+        self.form_task.moveToThread(self.form_thread)
+
+        self.form_thread.started.connect(self.form_task.run)
+        self.form_task.finished.connect(self.handle_results)
+        self.form_task.finished.connect(self.form_thread.quit)
+        self.form_task.finished.connect(self.form_task.deleteLater)
+        self.form_thread.finished.connect(self.form_thread.deleteLater)
+
+        self.form_thread.start()
+
+    def handle_results(self, results: str):
+        """Handle the form results."""
+        self.form_results.emit(results)
