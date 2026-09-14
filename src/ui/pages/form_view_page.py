@@ -18,6 +18,13 @@ class FormViewPage(QWidget):
         # Text browser
         self.text_browser = QTextBrowser(self)
 
+        self.text_browser.setStyleSheet("""
+            QTextBrowser {
+                background-color: #ffffff;
+                color: #000000;
+                }
+        """)
+
         # Main layout
         layout = QVBoxLayout(self)
         layout.addWidget(self.text_browser)

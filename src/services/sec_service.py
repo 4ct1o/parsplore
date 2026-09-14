@@ -87,7 +87,7 @@ def create_submission_html(form_info: dict) -> str:
                 "ix:hidden",
                 "ix:resources",
             }
-            or tag.name.lower().startswith("ix:")
+            # or tag.name.lower().startswith("ix:") # this delete numbers in financial statement part, ix:nonfraction
         )
     ):
         tag.decompose()
