@@ -132,6 +132,9 @@ def create_form_link(form_info: dict) -> str:
     ticker = str(form_info.get("ticker", "")).strip().lower()
     report_date = str(form_info.get("report_date", "")).replace('-', '').strip()
 
+    if "-" in ticker:
+        ticker = ticker.split("-")[0] + "a"
+
     if not cik or not cik.isdigit():
         raise ValueError(f"Invalid CIK received: {cik!r}")
 
