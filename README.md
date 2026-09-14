@@ -9,16 +9,16 @@ parsplore() - a minimalist app for exploring public company reports.
 
 ## upcoming features
 
-[ ] filtering submission results
-[ ] collapsible section navigation in report view
-[ ] settings page
+- [ ] filtering submission results
+- [ ] collapsible section navigation in report view
+- [ ] settings page
 
 ## future ideas
 
-[ ] saving reports
-[ ] comparing reports
-[ ] company watchlist
-[ ] extractiong financial data from reports
+- [ ] saving reports
+- [ ] comparing reports
+- [ ] company watchlist
+- [ ] extractiong financial data from reports
 
 ## why?
 
